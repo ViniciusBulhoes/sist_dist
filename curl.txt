@@ -1,0 +1,40 @@
+curl -X POST http://localhost:8080/post \
+  -H "Content-Type: application/json" \
+  -d '{
+    "processId": 0,
+    "parentId": null,
+    "author": "Toad",
+    "content": "Ola, sou Toad",
+    "eventId": "post-1"
+  }'
+
+curl -X POST http://localhost:8081/post \
+  -H "Content-Type: application/json" \
+  -d '{
+    "processId": 1,
+    "parentId": "post-1",
+    "author": "Luigi",
+    "content": "Ola Toad, sou Luigi",
+    "eventId": "post-2"
+  }'
+
+curl -X POST http://localhost:8082/post \
+  -H "Content-Type: application/json" \
+  -d '{
+    "processId": 2,
+    "parentId": null,
+    "author": "Mario",
+    "content": "Odeio o Bowser",
+    "eventId": "post-3"
+  }'
+
+curl -X POST http://localhost:8081/post \
+  -H "Content-Type: application/json" \
+  -d '{
+    "processId": 1,
+    "parentId": "post-3",
+    "author": "Luigi",
+    "content": "Eu também!",
+    "eventId": "post-4"
+  }'
+
