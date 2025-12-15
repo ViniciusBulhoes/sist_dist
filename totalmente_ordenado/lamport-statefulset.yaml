@@ -1,0 +1,45 @@
+# --------------------------
+# Headless Service
+# --------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: lamport-svc
+spec:
+  clusterIP: None   # headless service for stable DNS
+  selector:
+    app: lamport
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+---
+# --------------------------
+# StatefulSet
+# --------------------------
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lamport
+spec:
+  serviceName: "lamport-svc"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lamport
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: lamport
+    spec:
+      containers:
+      - name: lamport-container
+        image: lamport-app:1.0
+        ports:
+          - containerPort: 8080
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
